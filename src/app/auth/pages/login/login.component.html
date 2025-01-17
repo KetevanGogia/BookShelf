@@ -1,0 +1,34 @@
+<div class="container mt-5">
+  <div class="row">
+    <mat-card class="login d-flex col-md pb-2">
+      <mat-card-header class="login__header mb-4">Log In</mat-card-header>
+      <form [formGroup]="loginForm" class="login__form d-flex flex-column">
+        <mat-card-content class="login__content d-flex flex-column">
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input formControlName="password" matInput />
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions class="d-flex">
+          <button
+            class="cursor-point"
+            mat-raised-button
+            color="primary"
+            [disabled]="!loginForm.valid"
+            (click)="logIn()"
+          >
+            Login
+          </button>
+        </mat-card-actions>
+      </form>
+      <mat-card-footer class="mx-auto">
+        <span>Would you like to create an account ? &nbsp; </span>
+        <a class="cursor-pointer" (click)="navigate()">Click here</a>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</div>

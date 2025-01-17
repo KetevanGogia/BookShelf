@@ -1,0 +1,50 @@
+<div class="container mt-5">
+  <div class="row">
+    <mat-card class="register d-flex col-md pb-2">
+      <mat-card-header class="register__header mb-4">Register</mat-card-header>
+      <form
+        [formGroup]="registerForm"
+        class="register__form d-flex flex-column"
+      >
+        <mat-card-content class="register__content d-flex flex-column">
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input formControlName="firstName" matInput />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input formControlName="password" matInput />
+            <mat-hint
+              *ngIf="registerForm.controls['password']?.touched && registerForm.controls['password']?.errors?.['minlength']"
+            >
+              password should contain at least 8 characters
+            </mat-hint>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions class="d-flex">
+          <button
+            class="cursor-point"
+            mat-raised-button
+            color="primary"
+            [disabled]="!registerForm.valid"
+            (click)="register()"
+          >
+            Register
+          </button>
+        </mat-card-actions>
+      </form>
+      <mat-card-footer class="mx-auto">
+        <span>Already have an account ? sign in </span>
+        <a class="cursor-pointer" (click)="navigate()">here</a>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</div>

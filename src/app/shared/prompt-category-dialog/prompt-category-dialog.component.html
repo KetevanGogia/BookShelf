@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Hi</h2>
+<mat-dialog-content>
+  <p>Please choose your favourite category</p>
+  <mat-form-field [formGroup]="categoryForm">
+    <mat-label>Categories</mat-label>
+    <select formControlName="category" matNativeControl required>
+      <option
+        matOption
+        *ngFor="let category of bookCategories"
+        [value]="category"
+      >
+        {{ category | capitalize }}
+      </option>
+    </select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="closeDialog()" color="warn">Cancel</button>
+  <button
+    mat-button
+    cdkFocusInitial
+    (click)="onContinueJourney()"
+    color="primary"
+    [disabled]="!categoryForm.valid"
+  >
+    Continue
+  </button>
+</mat-dialog-actions>

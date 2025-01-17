@@ -1,0 +1,77 @@
+<div class="header pb-2">
+  <div class="header__logo d-flex align-items-center">
+    <img src="../../../assets/icons/book-shelf.png" alt="logo" />
+    <p class="header__logo-text cursor-pointer" routerLink="">BookShelf</p>
+  </div>
+  <hr class="border border-dark" />
+  <div class="header__content">
+    <div class="header__search position-relative">
+      <div class="header__auth d-flex">
+        <div class="d-flex align-items-center gap-3">
+          <button
+            *ngIf="!(user$ | async)"
+            class="cursor-point"
+            mat-raised-button
+            color="primary"
+            [routerLink]="'auth/login'"
+          >
+            Login
+          </button>
+          <button
+            *ngIf="!(user$ | async)"
+            class="cursor-pointer"
+            mat-button
+            color="primary"
+            [routerLink]="'auth/register'"
+          >
+            Register
+          </button>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div *ngIf="user$ | async as user" class="font-weight-normal">
+            Hello, {{ user?.displayName | capitalize }}
+          </div>
+          <button
+            *ngIf="user$ | async"
+            class="cursor-pointer"
+            mat-button
+            color="warn"
+            (click)="openLogoutDialog()"
+          >
+            Log out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="header__search position-relative">
+  <input
+    [(ngModel)]="title"
+    class="header__search-field shadow border-0"
+    type="text"
+    placeholder="Enter book name..."
+    [matAutocomplete]="auto"
+    (input)="searchBook()"
+  />
+  <mat-icon class="position-absolute header__search-icon" color="primary"
+    >search</mat-icon
+  >
+  <mat-autocomplete #auto="matAutocomplete">
+    @for (result of results; track result) {
+    <mat-option [value]="result" (click)="seeMore(result)" class="mb-2">
+      <div>
+        <div class="d-flex gap-3">
+          <img src="{{ result?.volumeInfo?.imageLinks?.thumbnail }}" />
+          <div>
+            <h5>{{ result?.volumeInfo?.title }}</h5>
+            <h5>{{ result?.volumeInfo?.authors }}</h5>
+          </div>
+        </div>
+      </div>
+    </mat-option>
+    <hr />
+    }
+  </mat-autocomplete>
+</div>

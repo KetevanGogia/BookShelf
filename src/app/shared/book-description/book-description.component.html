@@ -1,0 +1,73 @@
+<div class="container-fluid w-100 bg-dark cover mb-4">
+  <mat-card
+    class="cover__card d-flex flex-column justify-content-center align-items-center gap-2"
+  >
+    <mat-card-title class="w-100 p-2 d-flex justify-content-end">
+      <mat-icon
+        *ngIf="controlAdding() !== 'read'"
+        color="primary"
+        class="cursor-pointer"
+        (click)="addToRead()"
+        matTooltip="add to read"
+        aria-label="read-books"
+        >check_circle_outline</mat-icon
+      >
+      <mat-icon
+        *ngIf="controlAdding() === 'read'"
+        color="warn"
+        class="cursor-pointer"
+        (click)="removeFromReadBooks()"
+        matTooltip="Book is read"
+        aria-label="remove-read-books"
+        >bookmark_remove</mat-icon
+      >
+    </mat-card-title>
+    <mat-card-content
+      class="d-flex flex-column justify-content-center align-items-center gap-2"
+    >
+      <div class="font-weight-bold">{{ chosenBook?.volumeInfo?.title }}</div>
+      <div class="font-italic">{{ chosenBook?.volumeInfo?.authors }}</div>
+      <img
+        *ngIf="chosenBook?.volumeInfo?.imageLinks?.thumbnail"
+        src="{{ chosenBook?.volumeInfo?.imageLinks?.thumbnail }}"
+        alt="cover"
+        class="book"
+      />
+      <div
+        *ngIf="!chosenBook?.volumeInfo?.imageLinks?.thumbnail"
+        class="bg-white d-flex justify-content-center align-items-center carousel__no-img"
+      >
+        <img src="../../../assets/icons/no-image.png" alt="no-image" />
+      </div>
+      <p class="mt-2 cover__description">
+        {{ chosenBook?.volumeInfo?.description }}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="cursor-point mb-3"
+        mat-raised-button
+        color="primary"
+        (click)="addToWanted()"
+        *ngIf="controlAdding() == 'not_listed'"
+      >
+        Want to read
+      </button>
+
+      <button
+        *ngIf="controlAdding() == 'wanted'"
+        class="cursor-point bg-success text-light"
+        mat-raised-button
+        (click)="removeFromWanted()"
+      >
+        Remove from want to read list
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<!-- <div class="comment-section">
+  <app-comment-section
+    [bookId]="chosenBook?.id"
+    [uid]="userId"
+  ></app-comment-section>
+</div> -->

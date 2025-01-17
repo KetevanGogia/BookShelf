@@ -1,0 +1,97 @@
+<div *ngIf="user" class="jumbotron jumbotron-fluid mt-2 mb-2">
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <h1 class="display-4">Go to Dashboard</h1>
+      <mat-icon class="cursor-pointer" routerLink="/dashboard"
+        >arrow_forward</mat-icon
+      >
+    </div>
+    <p class="lead lh-base">
+      You can manage your lists and find books that fit for you via Reader
+      dashboard
+    </p>
+  </div>
+</div>
+<ng-container
+  *ngIf="
+    user &&
+      (category === bookCategories.READ ||
+        category === bookCategories.WANT_TO_READ) &&
+      amount === 0;
+    else data
+  "
+>
+  <app-no-data-template></app-no-data-template>
+</ng-container>
+<ng-template #data>
+  <mat-card class="carousel-card mt-2">
+    <mat-card-content>
+      <div id="booksCarousel" class="carousel slide carousel-container">
+        <div class="carousel-indicators">
+          <button
+            *ngFor="let slide of slides; index as i"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="0"
+            [ngClass]="isActiveSlide(i) ? 'active' : null"
+            aria-current="true"
+            aria-label="Slide 1"
+          ></button>
+        </div>
+        <div class="carousel-inner">
+          <div
+            class="carousel-item"
+            *ngFor="let slide of slides; index as i"
+            [ngClass]="isActiveSlide(i) ? 'active' : null"
+          >
+            <div
+              class="font-weight-bold mb-2 text-light carousel-container__txt"
+            >
+              {{ slide.volumeInfo.title }}
+            </div>
+            <div class="font-italic mb-2 text-light carousel-container__txt">
+              {{ slide.volumeInfo.authors }}
+            </div>
+            <div *ngIf="slide.volumeInfo.imageLinks?.thumbnail">
+              <img
+                src="{{ slide.volumeInfo.imageLinks.thumbnail }}"
+                alt=""
+                class="d-block w-100 carousel-container__img"
+              />
+            </div>
+            <div class="carousel-caption d-block">
+              <button
+                class="cursor-point mb-3"
+                mat-raised-button
+                color="primary"
+                (click)="seeMore(slide.id)"
+              >
+                See more
+              </button>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="prev"
+          (click)="decrease()"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="next"
+          (click)="increase()"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-template>

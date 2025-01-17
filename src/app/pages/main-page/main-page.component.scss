@@ -1,0 +1,17 @@
+$color-violet: rgb(247, 231, 247);
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+
+  &__card {
+    background-color: $color-violet;
+    row-gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .categories {
+    grid-template-columns: 1fr;
+  }
+}

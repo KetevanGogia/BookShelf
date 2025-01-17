@@ -1,0 +1,13 @@
+<p>comment-section works!</p>
+<mat-form-field [formGroup]="commentForm">
+  <mat-label>Add comment</mat-label>
+  <textarea matInput formControlName="comment"></textarea>
+</mat-form-field>
+<button
+  color="primary"
+  mat-flat-button
+  [disabled]="!commentForm.valid"
+  (click)="addComment()"
+>
+  Add comment
+</button>

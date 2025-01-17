@@ -1,0 +1,68 @@
+<div class="categories p-4">
+  <mat-card
+    class="categories__card d-flex flex-column align-items-center justify-content-center p-3"
+  >
+    <mat-card-title class="categories__card-title"
+      >Books you want to read</mat-card-title
+    >
+    <mat-card-content>
+      <div>
+        <img src="../../../assets/icons/shelf.png" alt="shelf" />
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="cursor-point"
+        mat-raised-button
+        color="primary"
+        routerLink="booklist/wanted/{{ uid }}"
+      >
+        See more
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card
+    class="categories__card d-flex flex-column align-items-center justify-content-center p-3"
+  >
+    <mat-card-title class="categories__card-title"
+      >Books you have read</mat-card-title
+    >
+    <mat-card-content>
+      <div>
+        <img src="../../../assets/icons/shelf.png" alt="shelf" />
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="cursor-point"
+        mat-raised-button
+        color="primary"
+        routerLink="booklist/read/{{ uid }}"
+      >
+        See more
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card
+    class="categories__card d-flex flex-column align-items-center justify-content-center p-3"
+  >
+    <mat-card-title class="categories__card-title"
+      >Suggested for you</mat-card-title
+    >
+    <mat-card-content>
+      <div>
+        <img src="../../../assets/icons/shelf.png" alt="shelf" />
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="cursor-point"
+        mat-raised-button
+        color="primary"
+        (click)="openDialog()"
+      >
+        See more
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
