@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { debounceTime, Observable } from 'rxjs';
+import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
 import { User as FirebaseUser } from 'firebase/auth';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { BooksService } from '../../services/books/books.service';
@@ -37,12 +37,13 @@ import { LogOutComponent } from '../log-out/log-out.component';
   templateUrl: './shared-header.component.html',
   styleUrl: './shared-header.component.scss',
 })
-export class SharedHeaderComponent implements OnInit {
+export class SharedHeaderComponent implements OnInit, OnDestroy {
   public title: string | undefined;
   public results: BookEntity[] | undefined;
   public user$: Observable<FirebaseUser> | undefined;
   public user: FirebaseUser | undefined;
   readonly dialog = inject(MatDialog);
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     public authService: AuthService,
@@ -52,7 +53,7 @@ export class SharedHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.user$ = this.authService.getCurrentUser() as any;
-    this.user$?.subscribe((user) => {
+    this.user$?.pipe(takeUntil(this.unsubscribe$)).subscribe((user) => {
       this.user = user;
     });
   }
@@ -63,9 +64,12 @@ export class SharedHeaderComponent implements OnInit {
 
   public searchBook() {
     if (this.title) {
-      this.bookService.retrieveBook(this.title).subscribe((data: any) => {
-        this.results = data.items;
-      });
+      this.bookService
+        .retrieveBook(this.title)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((data: any) => {
+          this.results = data.items;
+        });
     }
   }
 
@@ -87,5 +91,10 @@ export class SharedHeaderComponent implements OnInit {
 
   public openLogoutDialog(): void {
     const dialogRef = this.dialog.open(LogOutComponent);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
