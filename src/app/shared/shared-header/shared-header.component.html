@@ -47,17 +47,20 @@
 </div>
 
 <div class="header__search position-relative">
-  <input
-    [(ngModel)]="title"
-    class="header__search-field shadow border-0"
-    type="text"
-    placeholder="Enter book name..."
-    [matAutocomplete]="auto"
-    (input)="searchBook()"
-  />
-  <mat-icon class="position-absolute header__search-icon" color="primary"
-    >search</mat-icon
-  >
+  <form [formGroup]="searchForm">
+    <input
+      [(ngModel)]="title"
+      class="header__search-field shadow border-0"
+      formControlName="search"
+      type="text"
+      placeholder="Enter book name..."
+      [matAutocomplete]="auto"
+      (input)="searchBook()"
+    />
+    <mat-icon class="position-absolute header__search-icon" color="primary"
+      >search</mat-icon
+    >
+  </form>
   <mat-autocomplete #auto="matAutocomplete">
     @for (result of results; track result) {
     <mat-option [value]="result" (click)="seeMore(result)" class="mb-2">

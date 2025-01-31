@@ -3,11 +3,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { debounceTime, Observable, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  Observable,
+  Subject,
+  switchMap,
+  takeUntil,
+  debounce,
+} from 'rxjs';
 import { User as FirebaseUser } from 'firebase/auth';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { BooksService } from '../../services/books/books.service';
@@ -33,6 +46,7 @@ import { LogOutComponent } from '../log-out/log-out.component';
     MatInputModule,
     AsyncPipe,
     MatAutocompleteModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './shared-header.component.html',
   styleUrl: './shared-header.component.scss',
@@ -43,12 +57,15 @@ export class SharedHeaderComponent implements OnInit, OnDestroy {
   public user$: Observable<FirebaseUser> | undefined;
   public user: FirebaseUser | undefined;
   readonly dialog = inject(MatDialog);
+  public searchField: FormControl = new FormControl();
+  public searchForm: FormGroup = this.fb.group({ search: this.searchField });
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     public authService: AuthService,
     private router: Router,
-    private bookService: BooksService
+    private bookService: BooksService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -64,11 +81,13 @@ export class SharedHeaderComponent implements OnInit, OnDestroy {
 
   public searchBook() {
     if (this.title) {
-      this.bookService
-        .retrieveBook(this.title)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((data: any) => {
-          this.results = data.items;
+      this.searchField.valueChanges
+        .pipe(
+          debounceTime(400),
+          switchMap((term: string) => this.bookService.retrieveBook(term))
+        )
+        .subscribe((result: any) => {
+          this.results = result.items;
         });
     }
   }
